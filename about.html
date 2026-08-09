@@ -1,196 +1,194 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>연남 가라오케 예약 — 기술적 사양 및 아키텍처 가이드</title>
-    <meta name="description" content="연남 지역의 고음질 가라오케 룸에 대한 상세 스펙, 음향 공학 기준, 그리고 시간대별 최적화 전략. 단순 예약을 넘어선 엔터테인먼트 인프라 분석.">
-    <meta name="keywords" content="연남 가라오케, 연남 룸 사양, 연남 노래방 기술, yeonnam karaoke specs, high fidelity room">
-    <meta name="bpaas-design-system" content="editorial-apple">
-    <meta name="bpaas-design-theme" content="kr-warm-grid">
-    <!-- Open Graph / Twitter -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="연남 가라오케 예약 — 기술적 사양 및 아키텍처 가이드">
-    <meta property="og:description" content="연남 지역의 고음질 가라오케 룸에 대한 상세 스펙, 음향 공학 기준, 그리고 시간대별 최적화 전략. 단순 예약을 넘어선 엔터테인먼트 인프라 분석.">
-    <!-- Favicon -->
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <style>
-        /* CSS DNA & Base Variables */
-        :root {
-            --c-bg: #F5F5F7;
-            --c-text: #1D1D1F;
-            --c-accent: #007AFF;
-            --c-border: #E5E5EA;
-            --f-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --f-serif: "Georgia", "Times New Roman", serif;
-            --s-sp-1: 8px;
-            --s-sp-2: 16px;
-            --s-sp-3: 24px;
-            --r-sm: 4px;
-            --r-md: 8px;
-            --z-nav: 100;
-        }
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>연남 가라오케 예약 — 기술적 사양 및 아키텍처 가이드</title>
+ <meta name="description" content="연남 지역의 고음질 가라오케 룸에 대한 상세 스펙, 음향 공학 기준, 그리고 시간대별 최적화 전략. 단순 예약을 넘어선 엔터테인먼트 인프라 분석.">
+ <meta name="keywords" content="연남 가라오케, 연남 룸 사양, 연남 노래방 기술, yeonnam karaoke specs, high fidelity room">
+ <!-- Open Graph / Twitter -->
+ <meta property="og:type" content="website">
+ <meta property="og:title" content="연남 가라오케 예약 — 기술적 사양 및 아키텍처 가이드">
+ <meta property="og:description" content="연남 지역의 고음질 가라오케 룸에 대한 상세 스펙, 음향 공학 기준, 그리고 시간대별 최적화 전략. 단순 예약을 넘어선 엔터테인먼트 인프라 분석.">
+ <!-- Favicon -->
+ <link rel="icon" href="/favicon.ico" type="image/x-icon">
+ <style>
+ /* CSS DNA & Base Variables */
+ :root {
+ --c-bg: #F5F5F7;
+ --c-text: #1D1D1F;
+ --c-accent: #007AFF;
+ --c-border: #E5E5EA;
+ --f-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+ --f-serif: "Georgia", "Times New Roman", serif;
+ --s-sp-1: 8px;
+ --s-sp-2: 16px;
+ --s-sp-3: 24px;
+ --r-sm: 4px;
+ --r-md: 8px;
+ --z-nav: 100;
+ }
 
-        /* Base Reset & Typography */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--f-main); color: var(--c-text); background-color: var(--c-bg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
-        
-        /* Utility Classes for Layout */
-        .m-foot-1uvf { width: 100%; padding: var(--s-sp-3) 0; background: #fff; border-top: 1px solid var(--c-border); }
-        .v-item-s337-3col { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-sp-2); max-width: 1280px; margin: 0 auto; padding: 0 var(--s-sp-2); }
-        .r-wrap-xpq1-3col { display: flex; flex-direction: column; max-width: 1280px; margin: 0 auto; padding: 0 var(--s-sp-2); gap: var(--s-sp-3); }
-        .t-box-wh8l-row { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--c-border); padding: var(--s-sp-2) 0; }
-        .t-box-wh8l-center { text-align: center; }
+ /* Base Reset & Typography */
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+ body { font-family: var(--f-main); color: var(--c-text); background-color: var(--c-bg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+ 
+ /* Utility Classes for Layout */
+ .m-foot-1uvf { width: 100%; padding: var(--s-sp-3) 0; background: #fff; border-top: 1px solid var(--c-border); }
+ .v-item-s337-3col { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-sp-2); max-width: 1280px; margin: 0 auto; padding: 0 var(--s-sp-2); }
+ .r-wrap-xpq1-3col { display: flex; flex-direction: column; max-width: 1280px; margin: 0 auto; padding: 0 var(--s-sp-2); gap: var(--s-sp-3); }
+ .t-box-wh8l-row { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--c-border); padding: var(--s-sp-2) 0; }
+ .t-box-wh8l-center { text-align: center; }
 
-        /* Typography Hierarchy */
-        .q-top-vwpe-serif { font-family: var(--f-serif); font-weight: 700; letter-spacing: -0.02em; margin-bottom: var(--s-sp-1); }
-        .t-title-h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; color: #000; }
-        .t-desc-md { font-size: 1.125rem; color: var(--c-text); opacity: 0.9; margin-top: var(--s-sp-1); }
-        .t-card-bg { background: #fff; padding: var(--s-sp-3); border-radius: var(--r-md); box-shadow: 0 4px 24px rgba(0,0,0,0.05); }
+ /* Typography Hierarchy */
+ .q-top-vwpe-serif { font-family: var(--f-serif); font-weight: 700; letter-spacing: -0.02em; margin-bottom: var(--s-sp-1); }
+ .t-title-h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; color: #000; }
+ .t-desc-md { font-size: 1.125rem; color: var(--c-text); opacity: 0.9; margin-top: var(--s-sp-1); }
+ .t-card-bg { background: #fff; padding: var(--s-sp-3); border-radius: var(--r-md); box-shadow: 0 4px 24px rgba(0,0,0,0.05); }
 
-        /* Component Specific */
-        .nav-present nav { display: flex; align-items: center; justify-content: space-between; padding: var(--s-sp-3) 0; background: #fff; position: sticky; top: 0; z-index: var(--z-nav); border-bottom: 1px solid var(--c-border); }
-        .hamburger-menu { display: none; cursor: pointer; font-weight: bold; padding: 8px; }
-        
-        @media (max-width: 768px) {
-            .v-item-s337-3col { grid-template-columns: 1fr; gap: var(--s-sp-2); }
-            .t-title-h1 { font-size: 2rem; }
-            .hamburger-menu { display: block; }
-        }
+ /* Component Specific */
+ .nav-present nav { display: flex; align-items: center; justify-content: space-between; padding: var(--s-sp-3) 0; background: #fff; position: sticky; top: 0; z-index: var(--z-nav); border-bottom: 1px solid var(--c-border); }
+ .hamburger-menu { display: none; cursor: pointer; font-weight: bold; padding: 8px; }
+ 
+ @media (max-width: 768px) {
+ .v-item-s337-3col { grid-template-columns: 1fr; gap: var(--s-sp-2); }
+ .t-title-h1 { font-size: 2rem; }
+ .hamburger-menu { display: block; }
+ }
 
-        /* Grid Layout for Content */
-        .grid-info { display: grid; grid-template-columns: 2fr 1fr; gap: var(--s-sp-3); margin-top: var(--s-sp-3); }
-        .info-col-main { }
-        .info-col-side { background: #F0F0F5; padding: var(--s-sp-3); border-radius: var(--r-md); }
+ /* Grid Layout for Content */
+ .grid-info { display: grid; grid-template-columns: 2fr 1fr; gap: var(--s-sp-3); margin-top: var(--s-sp-3); }
+ .info-col-main { }
+ .info-col-side { background: #F0F0F5; padding: var(--s-sp-3); border-radius: var(--r-md); }
 
-        /* List Styling */
-        ul.spec-list { list-style: none; counter-reset: spec-counter; }
-        ul.spec-list li { position: relative; padding-left: 32px; margin-bottom: 16px; counter-increment: spec-counter; }
-        ul.spec-list li::before { content: counter(spec-counter); position: absolute; left: 0; top: 0; font-weight: bold; color: var(--c-accent); font-size: 0.8em; }
+ /* List Styling */
+ ul.spec-list { list-style: none; counter-reset: spec-counter; }
+ ul.spec-list li { position: relative; padding-left: 32px; margin-bottom: 16px; counter-increment: spec-counter; }
+ ul.spec-list li::before { content: counter(spec-counter); position: absolute; left: 0; top: 0; font-weight: bold; color: var(--c-accent); font-size: 0.8em; }
 
-        /* Bold Typography for Key Terms */
-        .b-bold-red { font-weight: 800; color: #D32F2F; }
-        .b-bold-blue { font-weight: 800; color: var(--c-accent); }
-    </style>
-  <link rel="canonical" href="https://yeonnam-room-info.program-school.online/about.html">
-  <meta property="og:url" content="https://yeonnam-room-info.program-school.online/about.html">
+ /* Bold Typography for Key Terms */
+ .b-bold-red { font-weight: 800; color: #D32F2F; }
+ .b-bold-blue { font-weight: 800; color: var(--c-accent); }
+ </style>
+ <link rel="canonical" href="https://yeonnam-room-info.program-school.online/about.html">
+ <meta property="og:url" content="https://yeonnam-room-info.program-school.online/about.html">
   <meta name="twitter:card" content="summary">
 </head>
 <body>
 
-    <!-- Navigation & Header -->
-    <header class="m-foot-1uvf">
-        <nav class="v-item-s337-3col">
-            <div style="font-weight:900; font-size:1.5rem;">ARCHIVE_YEONNAM</div>
-            <div class="hamburger-menu">MENU</div>
-            <div style="display:flex; gap:24px; align-items:center;">
-                <a href="#" style="text-decoration:none; color:#333; font-weight:600;">HOME</a>
-                <a href="#" style="text-decoration:none; color:#333; font-weight:600;">ROOMS</a>
-                <a href="#" style="text-decoration:none; color:#333; font-weight:600;">BOOKING</a>
-            </div>
-        </nav>
-    </header>
+ <!-- Navigation & Header -->
+ <header class="m-foot-1uvf">
+ <nav class="v-item-s337-3col">
+ <div style="font-weight:900; font-size:1.5rem;">ARCHIVE_YEONNAM</div>
+ <div class="hamburger-menu">MENU</div>
+ <div style="display:flex; gap:24px; align-items:center;">
+ <a href="#" style="text-decoration:none; color:#333; font-weight:600;">HOME</a>
+ <a href="#" style="text-decoration:none; color:#333; font-weight:600;">ROOMS</a>
+ <a href="#" style="text-decoration:none; color:#333; font-weight:600;">BOOKING</a>
+ </div>
+ </nav>
+ </header>
 
-    <main class="r-wrap-xpq1-3col">
-        
-        <!-- Hero Section -->
-        <section class="t-box-wh8l-row" style="padding-top: 48px; border-bottom:none;">
-            <h1 class="t-title-h1 q-top-vwpe-serif">
-                THE ARCHITECTURE OF SOUND<br>
-                <span style="font-size:0.6em; color:#555; display:block; margin-top:8px;">연남 지역의 엔터테인먼트 아키텍처</span>
-            </h1>
-            <p class="t-desc-md">
-                단순한 룸 예약을 넘어선, 음향 공학적 기준과 공간 레이아웃 스펙을 포함한 전문 가이드입니다. 
-                연남동이라는 특정 지리적 코디네이트에서 구현되는 고음질 오디오 시스템의 물리적 한계와 기술적 솔루션에 대한 분석이 담겨 있습니다.
-            </p>
-        </section>
+ <main class="r-wrap-xpq1-3col">
+ 
+ <!-- Hero Section -->
+ <section class="t-box-wh8l-row" style="padding-top: 48px; border-bottom:none;">
+ <h1 class="t-title-h1 q-top-vwpe-serif">
+ THE ARCHITECTURE OF SOUND<br>
+ <span style="font-size:0.6em; color:#555; display:block; margin-top:8px;">연남 지역의 엔터테인먼트 아키텍처</span>
+ </h1>
+ <p class="t-desc-md">
+ 단순한 룸 예약을 넘어선, 음향 공학적 기준과 공간 레이아웃 스펙을 포함한 전문 가이드입니다. 
+ 연남동이라는 특정 지리적 코디네이트에서 구현되는 고음질 오디오 시스템의 물리적 한계와 기술적 솔루션에 대한 분석이 담겨 있습니다.
+ </p>
+ </section>
 
-        <!-- Main Content Grid -->
-        <div class="grid-info">
-            
-            <!-- Left Column: Detailed Specs & Tech -->
-            <article class="info-col-main" style="padding-top: var(--s-sp-3);">
-                <h2 class="q-top-vwpe-serif" style="font-size: 1.8rem; margin-bottom: 24px;">01. 음향 공학적 스펙 (Acoustic Engineering)</h2>
-                <div class="t-card-bg" style="margin-bottom: 32px;">
-                    <p style="margin-bottom:16px;"><strong>핵심 개념:</strong> 연남동 가라오케 룸의 음향은 단순히 '선명함'을 넘어, 특정 주파수 대역 (보컬 중심) 의 왜곡률을 최소화하는 것을 목표로 합니다. 평균 20~30 평 규모의 공간에서 고음질 사운드 시스템을 구축할 때 가장 중요한 것은 '방 울림 시간 (Reverberation Time)'의 제어입니다.</p>
-                    <ul class="spec-list">
-                        <li><strong>주파수 응답 (Frequency Response):</strong> 20Hz~20kHz 대역에서 평탄한 주파수 응답을 유지하는 것이 목표이나, 가라오케 특유의 보컬 강조를 위해 1kHz~4kHz 대역은 약 3dB 이상 증폭됩니다.</li>
-                        <li><strong>마이크 감도 (Mic Sensitivity):</strong> 고감도 마이크는 소음과 함께 잡음을 증폭시킬 수 있어, SNR (Signal-to-Noise Ratio) 이 40dB 이상 유지되는 모델이 선호됩니다.</li>
-                        <li><strong>지연 시간 (Latency):</strong> 블루투스 방식보다는 유선 연결이나 낮은 지연률의 디지털 프로세서를 사용하여 입과 소리의 연착각을 방지합니다.</li>
-                    </ul>
-                </div>
+ <!-- Main Content Grid -->
+ <div class="grid-info">
+ 
+ <!-- Left Column: Detailed Specs & Tech -->
+ <article class="info-col-main" style="padding-top: var(--s-sp-3);">
+ <h2 class="q-top-vwpe-serif" style="font-size: 1.8rem; margin-bottom: 24px;">01. 음향 공학적 스펙 (Acoustic Engineering)</h2>
+ <div class="t-card-bg" style="margin-bottom: 32px;">
+ <p style="margin-bottom:16px;"><strong>핵심 개념:</strong> 연남동 가라오케 룸의 음향은 단순히 '선명함'을 넘어, 특정 주파수 대역 (보컬 중심) 의 왜곡률을 최소화하는 것을 목표로 합니다. 평균 20~30 평 규모의 공간에서 고음질 사운드 시스템을 구축할 때 가장 중요한 것은 '방 울림 시간 (Reverberation Time)'의 제어입니다.</p>
+ <ul class="spec-list">
+ <li><strong>주파수 응답 (Frequency Response):</strong> 20Hz~20kHz 대역에서 평탄한 주파수 응답을 유지하는 것이 목표이나, 가라오케 특유의 보컬 강조를 위해 1kHz~4kHz 대역은 약 3dB 이상 증폭됩니다.</li>
+ <li><strong>마이크 감도 (Mic Sensitivity):</strong> 고감도 마이크는 소음과 함께 잡음을 증폭시킬 수 있어, SNR (Signal-to-Noise Ratio) 이 40dB 이상 유지되는 모델이 선호됩니다.</li>
+ <li><strong>지연 시간 (Latency):</strong> 블루투스 방식보다는 유선 연결이나 낮은 지연률의 디지털 프로세서를 사용하여 입과 소리의 연착각을 방지합니다.</li>
+ </ul>
+ </div>
 
-                <h2 class="q-top-vwpe-serif" style="font-size: 1.8rem; margin-bottom: 24px;">02. 공간 레이아웃 및 인프라 (Spatial Layout)</h2>
-                <div class="t-card-bg">
-                    <p style="margin-bottom:16px;"><strong>구조적 제약:</strong> 연남동은 주거 밀도가 높은 지역이므로, 외부 소음 유출 방지는 필수 조건입니다. 이중 유리창과 50mm 이상의 방음벽 두께가 기본 스펙입니다.</p>
-                    <ul class="spec-list">
-                        <li><strong>입구 방식:</strong> 슬라이딩 도어는 내부 공간의 음파 반사를 줄여주며, 회전 문 (Swinging Door) 보다 진동 소음을 최소화합니다.</li>
-                        <li><strong>좌석 배치:</strong> 원형 테이블은 모든 참여자에게 균일한 음향 환경을 제공하므로 선호도가 높습니다. 직사각형 형태는 특정 좌석의 사운드 불균형을 유발할 수 있습니다.</li>
-                    </ul>
-                </div>
-            </article>
+ <h2 class="q-top-vwpe-serif" style="font-size: 1.8rem; margin-bottom: 24px;">02. 공간 레이아웃 및 인프라 (Spatial Layout)</h2>
+ <div class="t-card-bg">
+ <p style="margin-bottom:16px;"><strong>구조적 제약:</strong> 연남동은 주거 밀도가 높은 지역이므로, 외부 소음 유출 방지는 필수 조건입니다. 이중 유리창과 50mm 이상의 방음벽 두께가 기본 스펙입니다.</p>
+ <ul class="spec-list">
+ <li><strong>입구 방식:</strong> 슬라이딩 도어는 내부 공간의 음파 반사를 줄여주며, 회전 문 (Swinging Door) 보다 진동 소음을 최소화합니다.</li>
+ <li><strong>좌석 배치:</strong> 원형 테이블은 모든 참여자에게 균일한 음향 환경을 제공하므로 선호도가 높습니다. 직사각형 형태는 특정 좌석의 사운드 불균형을 유발할 수 있습니다.</li>
+ </ul>
+ </div>
+ </article>
 
-            <!-- Right Column: Quick Reference / Side Info -->
-            <aside class="info-col-side">
-                <h3 style="margin-bottom:16px; font-weight:800;">QUICK CHECKLIST</h3>
-                <div style="display:flex; flex-direction:column; gap:12px;">
-                    <div style="background:#fff; padding:12px; border-radius:4px; border-left:4px solid var(--c-accent);">
-                        <strong>인원별 권장:</strong><br>
-                        3~4 인 (소형): 15~20 평<br>
-                        5~6 인 (중형): 25~30 평
-                    </div>
-                    <div style="background:#fff; padding:12px; border-radius:4px; border-left:4px solid #D32F2F;">
-                        <strong>최적 시간대:</strong><br>
-                        금/토 (19:00~23:00)<br>
-                        월~목 (All Day)
-                    </div>
-                    <div style="background:#fff; padding:12px; border-radius:4px; border-left:4px solid #4CAF50;">
-                        <strong>필수 준비물:</strong><br>
-                        신분증, 현금/카드 (비현금 80%)
-                    </div>
-                </div>
-            </aside>
+ <!-- Right Column: Quick Reference / Side Info -->
+ <aside class="info-col-side">
+ <h3 style="margin-bottom:16px; font-weight:800;">QUICK CHECKLIST</h3>
+ <div style="display:flex; flex-direction:column; gap:12px;">
+ <div style="background:#fff; padding:12px; border-radius:4px; border-left:4px solid var(--c-accent);">
+ <strong>인원별 권장:</strong><br>
+ 3~4 인 (소형): 15~20 평<br>
+ 5~6 인 (중형): 25~30 평
+ </div>
+ <div style="background:#fff; padding:12px; border-radius:4px; border-left:4px solid #D32F2F;">
+ <strong>최적 시간대:</strong><br>
+ 금/토 (19:00~23:00)<br>
+ 월~목 (All Day)
+ </div>
+ <div style="background:#fff; padding:12px; border-radius:4px; border-left:4px solid #4CAF50;">
+ <strong>필수 준비물:</strong><br>
+ 신분증, 현금/카드 (비현금 80%)
+ </div>
+ </div>
+ </aside>
 
-        </div>
-        
-        <!-- Secondary Content Section -->
-        <section style="margin-top: var(--s-sp-3); padding: var(--s-sp-3) 0;">
-            <h2 class="q-top-vwpe-serif" style="font-size: 1.8rem; margin-bottom: 24px;">03. 시간대별 최적화 전략 (Temporal Optimization)</h2>
-            <div class="v-item-s337-3col">
-                <div class="t-card-bg">
-                    <h4 style="margin-bottom:12px;">Weekend Protocol (주말 프로토콜)</h4>
-                    <p style="font-size:0.95rem; margin-bottom:8px;">
-                        주말에는 평균 30% 이상의 인원이 밀집되어 있어, 대기 시간과 소음 피크를 관리해야 합니다. 예약 시 'Peak Hour' (19:00~22:00) 에 방문할 경우, 시스템 부하가 커지므로 오디오 설정이 자동 모드 (Auto-Mode) 로 전환되는 경우가 많습니다.
-                    </p>
-                    <p style="font-size:0.95rem;">
-                        이를 보완하기 위해 예약 시 'Manual Mode'를 요청하고, 고음질 사운드바의 볼륨을 80% 이하로 제한하여 주변 환경 소음을 통제해야 합니다.
-                    </p>
-                </div>
-                <div class="t-card-bg">
-                    <h4 style="margin-bottom:12px;">Weekday Protocol (평일 프로토콜)</h4>
-                    <p style="font-size:0.95rem; margin-bottom:8px;">
-                        평일은 공간 활용도가 낮아 'Quiet Mode'를 지원하는 시스템이 많습니다. 이 경우 마이크의 감도를 수동으로 조정하여 배경 소음을 줄일 수 있습니다.
-                    </p>
-                    <p style="font-size:0.95rem;">
-                        또한, 주말과 달리 외부 유입 인구가 적어 조명 밝기를 20%까지 낮출 수 있으며, 이는 시각적 몰입도를 높이는 데 기여합니다.
-                    </p>
-                </div>
-            </div>
-        </section>
+ </div>
+ 
+ <!-- Secondary Content Section -->
+ <section style="margin-top: var(--s-sp-3); padding: var(--s-sp-3) 0;">
+ <h2 class="q-top-vwpe-serif" style="font-size: 1.8rem; margin-bottom: 24px;">03. 시간대별 최적화 전략 (Temporal Optimization)</h2>
+ <div class="v-item-s337-3col">
+ <div class="t-card-bg">
+ <h4 style="margin-bottom:12px;">Weekend Protocol (주말 프로토콜)</h4>
+ <p style="font-size:0.95rem; margin-bottom:8px;">
+ 주말에는 평균 30% 이상의 인원이 밀집되어 있어, 대기 시간과 소음 피크를 관리해야 합니다. 예약 시 'Peak Hour' (19:00~22:00) 에 방문할 경우, 시스템 부하가 커지므로 오디오 설정이 자동 모드 (Auto-Mode) 로 전환되는 경우가 많습니다.
+ </p>
+ <p style="font-size:0.95rem;">
+ 이를 보완하기 위해 예약 시 'Manual Mode'를 요청하고, 고음질 사운드바의 볼륨을 80% 이하로 제한하여 주변 환경 소음을 통제해야 합니다.
+ </p>
+ </div>
+ <div class="t-card-bg">
+ <h4 style="margin-bottom:12px;">Weekday Protocol (평일 프로토콜)</h4>
+ <p style="font-size:0.95rem; margin-bottom:8px;">
+ 평일은 공간 활용도가 낮아 'Quiet Mode'를 지원하는 시스템이 많습니다. 이 경우 마이크의 감도를 수동으로 조정하여 배경 소음을 줄일 수 있습니다.
+ </p>
+ <p style="font-size:0.95rem;">
+ 또한, 주말과 달리 외부 유입 인구가 적어 조명 밝기를 20%까지 낮출 수 있으며, 이는 시각적 몰입도를 높이는 데 기여합니다.
+ </p>
+ </div>
+ </div>
+ </section>
 
-    </main>
+ </main>
 
-    <!-- Footer -->
-    <footer class="m-foot-1uvf">
-        <div class="v-item-s337-3col" style="margin-top: 24px;">
-            <div style="font-weight:900; font-size:1.2rem;">ARCHIVE_YEONNAM</div>
-            <div style="font-size:0.9rem; color:#666;">© 2023 Yeonnam Karaoke Archive. All Rights Reserved.</div>
-            <div style="display:flex; gap:16px;">
-                <a href="#" style="color:#333; text-decoration:none; font-size:0.9rem;">INSTAGRAM</a>
-                <a href="#" style="color:#333; text-decoration:none; font-size:0.9rem;">TWITTER</a>
-            </div>
-        </div>
-    </footer>
+ <!-- Footer -->
+ <footer class="m-foot-1uvf">
+ <div class="v-item-s337-3col" style="margin-top: 24px;">
+ <div style="font-weight:900; font-size:1.2rem;">ARCHIVE_YEONNAM</div>
+ <div style="font-size:0.9rem; color:#666;">© 2023 Yeonnam Karaoke Archive. All Rights Reserved.</div>
+ <div style="display:flex; gap:16px;">
+ <a href="#" style="color:#333; text-decoration:none; font-size:0.9rem;">INSTAGRAM</a>
+ <a href="#" style="color:#333; text-decoration:none; font-size:0.9rem;">TWITTER</a>
+ </div>
+ </div>
+ </footer>
 
 </body>
 </html>
